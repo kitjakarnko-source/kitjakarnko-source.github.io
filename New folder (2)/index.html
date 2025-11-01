@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จดหมายให้พี่โซซ 💙 - Ultimate Background</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==================================== */
+        /* 1. Global & Font Setup */
+        /* ==================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            /* พื้นหลังธีม Stellar Sky/Daylight */
+            background: linear-gradient(135deg, #001f3f 0%, #173f6f 30%, #4a86e0 70%, #81d4fa 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden; 
+            animation: backgroundShift 120s infinite alternate linear; /* อนิเมชันพื้นหลังเคลื่อนไหวช้ามาก */
+            background-size: 400% 400%;
+        }
+
+        @keyframes backgroundShift {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+        
+        /* 2. Particle Effects (Stars) - ดวงดาวระยิบระยับ */
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkle 3s infinite ease-in-out alternate;
+        }
+        /* ดวงดาวหลายสี */
+        .star:nth-child(2n) { background: #ffeb3b; opacity: 0.6; } 
+        .star:nth-child(3n) { background: #b3e5fc; opacity: 0.9; } 
+
+        @keyframes twinkle {
+            0% { transform: scale(0.5); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.5); opacity: 0.5; }
+        }
+
+
+        /* ==================================== */
+        /* 3. Container & Main Structure */
+        /* ==================================== */
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 550px; /* ใช้ขนาดเดิม */
+            perspective: 1200px; /* เพิ่มมิติ 3D สำหรับอนิเมชัน */
+            z-index: 25; /* ให้ container อยู่หน้าเมฆ/ดาว */
+        }
+
+        /* 4. Envelope (ซองจดหมาย) - คงสไตล์เดิมแต่เพิ่ม 3D Hover */
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background: #ffffff;
+            border-radius: 15px; 
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); 
+            cursor: pointer;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 20;
+            transform-style: preserve-3d; /* เปิดใช้งาน 3D */
+        }
+
+        /* 3D Hover Effect */
+        .envelope:hover {
+            transform: translateY(-10px) scale(1.03) rotateX(2deg) rotateY(2deg); 
+        }
+
+        .envelope-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 175px; 
+            background: #2196f3; 
+            border-radius: 15px 15px 0 0;
+            transform-origin: top;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8em;
+            font-weight: 600;
+            letter-spacing: 3px;
+            border-bottom: 3px solid #1976d2;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .envelope-top.open {
+            transform: rotateX(-180deg);
+        }
+
+        .envelope-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 175px;
+            background: #ffffff;
+            border-radius: 0 0 15px 15px;
+        }
+        
+        /* 5. Letter (จดหมาย) - สไตล์เดิม */
+        .letter {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 200; 
+            transform: translate(-50%, 0) scale(0.9); 
+            width: 95%;
+            height: 480px; 
+            background: #fffaf0; 
+            border-radius: 18px; 
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+            transition: transform 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.8s ease;
+            opacity: 0;
+            pointer-events: none;
+            border: 2px solid #ffab91; 
+            padding: 20px;
+        }
+
+        .letter.show {
+            transform: translate(-50%, -75%) scale(1); 
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 6. Shinchan Button (ตูดชินจัง) - สไตล์เดิม */
+        .shinchan-butt {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.4s ease, background 0.4s ease, opacity 0.4s ease;
+            background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); 
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+        }
+        
+        /* ข้อความ "กดที่ตูดชินจัง" */
+        .shinchan-butt span {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #8d6e63; 
+            margin-bottom: 15px;
+            animation: bounceText 2s infinite ease-in-out; 
+        }
+
+        @keyframes bounceText {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .shinchan-butt img {
+            max-width: 80%; 
+            max-height: 80%;
+            object-fit: contain;
+            transition: transform 0.4s ease, filter 0.4s ease;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2)); 
+        }
+
+        .shinchan-butt:hover img {
+            transform: scale(1.1) rotate(3deg); 
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.3));
+        }
+
+        /* 7. Message Board (ข้อความ) - สไตล์เดิม */
+        .shinchan-front {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            padding: 20px;
+            background: #fffaf0;
+            border-radius: 15px;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-board {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid #64b5f6;
+            flex-grow: 1;
+            overflow-y: auto;
+            text-align: left;
+            line-height: 1.7; 
+            color: #424242; 
+            font-size: 1.05em; 
+            position: relative; 
+        }
+
+        .message-board p {
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .message-board img {
+            display: block;
+            margin: 25px auto 0 auto; 
+            max-width: 60%; 
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15); 
+            transition: transform 0.3s ease;
+        }
+
+        .message-board img:hover {
+            transform: scale(1.05); 
+        }
+
+        .signature {
+            margin-top: 30px; 
+            text-align: right;
+            color: #2196f3;
+            font-weight: 700; 
+            font-size: 1.3em; 
+            border-top: 1px solid #bbdefb; 
+            padding-top: 15px;
+            letter-spacing: 1px;
+        }
+
+        .instruction {
+            text-align: center;
+            margin-top: 30px;
+            color: #2196f3;
+            font-size: 1.1em;
+            font-weight: 600;
+            opacity: 0;
+            animation: blink 2s infinite ease-in-out;
+            text-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
+            z-index: 30; /* ให้อยู่หน้า */
+        }
+
+        .instruction.show {
+            opacity: 1;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* 8. ดวงอาทิตย์อลังการ */
+        .sun {
+            position: absolute;
+            top: 5%;
+            right: 5%;
+            width: 150px; 
+            height: 150px;
+            background: radial-gradient(circle, #ffeb3b 30%, #ffc107 70%);
+            border-radius: 50%;
+            /* เพิ่มแสงเรืองรองหลายชั้น */
+            box-shadow: 0 0 50px #ffc107, 0 0 100px #ffeb3b, 0 0 150px rgba(255, 193, 7, 0.8);
+            animation: pulseSun 10s infinite ease-in-out alternate;
+            z-index: 10;
+        }
+
+        .sun::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border-radius: 50%;
+            border: 5px solid rgba(255, 235, 59, 0.5);
+            animation: borderPulse 5s infinite linear;
+        }
+
+        @keyframes borderPulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        @keyframes pulseSun {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        /* 9. เมฆที่ซับซ้อนกว่าเดิม */
+        .background-elements {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden; 
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.98); 
+            border-radius: 100px;
+            opacity: 0.9;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            filter: blur(1px); 
+            animation: float 40s infinite linear; 
+        }
+        
+        /* เพิ่มความหลากหลายของเมฆ */
+        .cloud:nth-child(1) { width: 180px; height: 70px; top: 15%; left: -250px; animation-delay: 0s; animation-duration: 40s; }
+        .cloud:nth-child(2) { width: 250px; height: 90px; top: 45%; left: -350px; animation-delay: 10s; animation-duration: 50s; }
+        .cloud:nth-child(3) { width: 150px; height: 60px; top: 80%; left: -180px; animation-delay: 20s; animation-duration: 35s; }
+        .cloud:nth-child(4) { width: 220px; height: 80px; top: 30%; left: -400px; animation-delay: 5s; animation-duration: 60s; opacity: 0.7; }
+        .cloud:nth-child(5) { width: 120px; height: 50px; top: 65%; left: -150px; animation-delay: 15s; animation-duration: 30s; opacity: 0.9; }
+        .cloud:nth-child(6) { width: 280px; height: 100px; top: 55%; left: -500px; animation-delay: 25s; animation-duration: 70s; opacity: 0.6; }
+
+
+        @keyframes float {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 600px)); } 
+        }
+
+        /* 10. รูปภาพลอยสนุกๆ เมื่อเปิดตูดชินจัง */
+        .floating-images {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 15;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .floating-images.show {
+            opacity: 1;
+        }
+
+        .floating-img {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            animation: float 40s infinite linear;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+            opacity: 0.85;
+        }
+
+        /* แต่ละรูปมีขนาดและความเร็วต่างกัน - ลอยเหมือนเมฆ */
+        .floating-img:nth-child(1) { 
+            width: 100px; height: 100px; 
+            top: 10%; left: -120px; 
+            animation-delay: 0s; 
+            animation-duration: 45s; 
+        }
+        .floating-img:nth-child(2) { 
+            width: 70px; height: 70px; 
+            top: 25%; left: -90px; 
+            animation-delay: 8s; 
+            animation-duration: 38s; 
+        }
+        .floating-img:nth-child(3) { 
+            width: 90px; height: 90px; 
+            top: 50%; left: -110px; 
+            animation-delay: 15s; 
+            animation-duration: 50s; 
+        }
+        .floating-img:nth-child(4) { 
+            width: 85px; height: 85px; 
+            top: 68%; left: -100px; 
+            animation-delay: 5s; 
+            animation-duration: 42s; 
+        }
+        .floating-img:nth-child(5) { 
+            width: 95px; height: 95px; 
+            top: 18%; left: -115px; 
+            animation-delay: 20s; 
+            animation-duration: 55s; 
+        }
+        .floating-img:nth-child(6) { 
+            width: 75px; height: 75px; 
+            top: 58%; left: -95px; 
+            animation-delay: 12s; 
+            animation-duration: 40s; 
+        }
+        .floating-img:nth-child(7) { 
+            width: 110px; height: 110px; 
+            top: 38%; left: -130px; 
+            animation-delay: 25s; 
+            animation-duration: 60s; 
+        }
+        .floating-img:nth-child(8) { 
+            width: 65px; height: 65px; 
+            top: 78%; left: -85px; 
+            animation-delay: 10s; 
+            animation-duration: 35s; 
+        }
+        .floating-img:nth-child(9) { 
+            width: 105px; height: 105px; 
+            top: 32%; left: -125px; 
+            animation-delay: 30s; 
+            animation-duration: 48s; 
+        }
+        .floating-img:nth-child(10) { 
+            width: 80px; height: 80px; 
+            top: 55%; left: -100px; 
+            animation-delay: 18s; 
+            animation-duration: 52s; 
+        }
+    </style>
+</head>
+<body>
+    
+<div class="stars">
+    <script>
+        const starsContainer = document.querySelector('.stars');
+        for (let i = 0; i < 20; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.width = star.style.height = `${Math.random() * 3 + 1}px`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 5}s`;
+            starsContainer.appendChild(star);
+        }
+    </script>
+</div>
+
+<div class="background-elements">
+    <div class="sun"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+</div>
+
+<div class="floating-images" id="floatingImages">
+    <img class="floating-img" src="https://media.discordapp.net/attachments/1432011699308990636/1434226933272547461/image0.jpg?ex=69078f6b&is=69063deb&hm=eb1e99d59796194e5d9c89aa72b8332952dc6fdba55b58024fe0132a6881a19a&=&format=webp" alt="ชินจัง">
+    <img class="floating-img" src="https://media.discordapp.net/attachments/1432011699308990636/1434219412868694097/removebgbymarjezsom.png?ex=6907886a&is=690636ea&hm=591d35e632cc9b731f4787c7f42a4d8a1ee6b0dca0de647fcedce15b63095b38&=&format=webp&quality=lossless" alt="ชินจัง2">
+    <img class="floating-img" src="https://cdn.discordapp.com/attachments/1432011699308990636/1434216351983210698/removebgbymarjezsom.png?ex=69078590&is=69063410&hm=24044e098f69e1a5d88a20b261dae2268e0db5ff45ad1bf09401cc0b405510d4&" alt="ชินจัง3">
+    <img class="floating-img" src="https://media.discordapp.net/attachments/1432011699308990636/1434219412868694097/removebgbymarjezsom.png?ex=6907886a&is=690636ea&hm=591d35e632cc9b731f4787c7f42a4d8a1ee6b0dca0de647fcedce15b63095b38&=&format=webp&quality=lossless" alt="ชินจัง4">
+    <img class="floating-img" src="https://cdn.discordapp.com/attachments/1432011699308990636/1434216351983210698/removebgbymarjezsom.png?ex=69078590&is=69063410&hm=24044e098f69e1a5d88a20b261dae2268e0db5ff45ad1bf09401cc0b405510d4&" alt="ชินจัง5">
+    <img class="floating-img" src="https://media.discordapp.net/attachments/1432011699308990636/1434219412868694097/removebgbymarjezsom.png?ex=6907886a&is=690636ea&hm=591d35e632cc9b731f4787c7f42a4d8a1ee6b0dca0de647fcedce15b63095b38&=&format=webp&quality=lossless" alt="ชินจัง6">
+    <img class="floating-img" src="https://cdn.discordapp.com/attachments/1432011699308990636/1434216351983210698/removebgbymarjezsom.png?ex=69078590&is=69063410&hm=24044e098f69e1a5d88a20b261dae2268e0db5ff45ad1bf09401cc0b405510d4&" alt="ชินจัง7">
+    <img class="floating-img" src="https://media.discordapp.net/attachments/1432011699308990636/1434219412868694097/removebgbymarjezsom.png?ex=6907886a&is=690636ea&hm=591d35e632cc9b731f4787c7f42a4d8a1ee6b0dca0de647fcedce15b63095b38&=&format=webp&quality=lossless" alt="ชินจัง8">
+    <img class="floating-img" src="https://cdn.discordapp.com/attachments/1432011699308990636/1434216351983210698/removebgbymarjezsom.png?ex=69078590&is=69063410&hm=24044e098f69e1a5d88a20b261dae2268e0db5ff45ad1bf09401cc0b405510d4&" alt="ชินจัง9">
+    <img class="floating-img" src="https://media.discordapp.net/attachments/1432011699308990636/1434219412868694097/removebgbymarjezsom.png?ex=6907886a&is=690636ea&hm=591d35e632cc9b731f4787c7f42a4d8a1ee6b0dca0de647fcedce15b63095b38&=&format=webp&quality=lossless" alt="ชินจัง10">
+</div>
+
+<div class="container">
+    <div class="envelope" id="envelope">
+        <div class="envelope-top" id="envelopeTop">
+            <span>💌 กดเพื่อเปิด</span>
+        </div>
+        <div class="envelope-bottom"></div>
+    </div>
+
+    <div class="letter" id="letter">
+        <div class="shinchan-butt" id="buttView"> 
+            <span>กดที่ตูดชินจังเพื่อเปิดอ่าน</span> 
+            <img src="https://cdn.discordapp.com/attachments/1432011699308990636/1434216351983210698/removebgbymarjezsom.png?ex=69078590&is=69063410&hm=24044e098f69e1a5d88a20b261dae2268e0db5ff45ad1bf09401cc0b405510d4&" alt="ชินจังตูดบิด">
+        </div>
+        <div class="shinchan-front" id="frontView">
+            <div class="message-board">
+                <p>
+                    **ซาหวัดดีค้าบพี่โซซ** ยินดีที่ได้รู้จักและได้เป็นน้องรหัสพี่โซน้าาา 
+                    หวังว่าเราจะได้ทำความรู้จักกันมากขึ้นนะคะ 
+                    หวังว่าพี่จะชอบของที่หนูซื้อให้นะคะ 
+                    ไม่รู้ว่าพี่ชอบสติทช์มั้ย แต่หนูเห็นพี่รีโพสต์ในไอจีเลยคิดว่าพี่น่าจะชอบสติทช์
+                    หวังว่าพี่จะชอบนะคะ 
+                    <br><br>
+                    <img src="https://media.discordapp.net/attachments/1432011699308990636/1434219412868694097/removebgbymarjezsom.png?ex=6907886a&is=690636ea&hm=591d35e632cc9b731f4787c7f42a4d8a1ee6b0dca0de647fcedce15b63095b38&=&format=webp&quality=lossless" alt="ชินจังหน้าตรง">
+                </p>
+                <div class="signature">💙 FAHSAI (น้องรหัส)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="instruction" id="instruction">
+        กดเพื่อเปิดจดหมายจ้า
+    </div>
+</div>
+
+    <script>
+        const envelope = document.getElementById('envelope');
+        const envelopeTop = document.getElementById('envelopeTop');
+        const letter = document.getElementById('letter');
+        const buttView = document.getElementById('buttView');
+        const frontView = document.getElementById('frontView');
+        const instruction = document.getElementById('instruction');
+        const floatingImages = document.getElementById('floatingImages');
+
+        let isOpen = false;
+        let buttClicked = false;
+
+        envelope.addEventListener('click', () => {
+            if (!isOpen) {
+                envelopeTop.classList.add('open');
+                setTimeout(() => {
+                    letter.classList.add('show');
+                    // ปรับข้อความ instruction เมื่อซองเปิดแล้ว
+                    instruction.textContent = '👆 คลิกที่ตูดชินจังเพื่ออ่านข้อความ';
+                    instruction.classList.add('show');
+                }, 400); // 400ms หลัง flap เริ่มเปิด
+                isOpen = true;
+            }
+        });
+
+        buttView.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!buttClicked) {
+                buttView.style.opacity = 0;
+                setTimeout(() => {
+                    buttView.style.display = 'none';
+                    frontView.style.display = 'flex';
+                    // อนิเมชัน fadeIn จะจัดการความโปร่งใสของ frontView
+                    instruction.style.display = 'none';
+                    // เปิดใช้งานรูปภาพลอย! 🎉
+                    floatingImages.classList.add('show');
+                }, 300); 
+                buttClicked = true;
+            }
+        });
+    </script>
+</body>
+</html>
